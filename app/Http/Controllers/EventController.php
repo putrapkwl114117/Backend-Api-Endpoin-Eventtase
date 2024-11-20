@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Event;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
+    // Fungsi untuk membuat event baru
     public function create(Request $request)
     {
         // Validasi data
@@ -30,6 +32,37 @@ class EventController extends Controller
             'image_path' => $imagePath, // simpan path gambar
         ]);
 
-        return response()->json(['message' => 'Event created successfully', 'event' => $event]);
+        // Membuat URL akses gambar yang benar
+        $imageUrl = $imagePath ? asset('storage/' . $imagePath) : null;
+
+        // Mengembalikan respons dengan URL gambar
+        return response()->json([
+            'message' => 'Event created successfully',
+            'event' => [
+                'name' => $event->name,
+                'description' => $event->description,
+                'image_path' => $imageUrl,  // Mengirimkan URL gambar
+            ]
+        ]);
+    }
+
+    // Fungsi untuk mendapatkan event berdasarkan organization_id
+    public function getEventsByOrganization(Request $request, $organizationId)
+    {
+        // Ambil semua event yang berhubungan dengan organizationId
+        $events = Event::where('organization_id', $organizationId)->get();
+
+        // Membuat URL akses gambar yang benar untuk setiap event
+        $eventsData = $events->map(function ($event) {
+            $imageUrl = $event->image_path ? asset('storage/' . $event->image_path) : null;
+            return [
+                'name' => $event->name,
+                'description' => $event->description,
+                'image_path' => $imageUrl,  // Mengirimkan URL gambar
+            ];
+        });
+
+        // Mengembalikan daftar event dalam format JSON
+        return response()->json($eventsData);
     }
 }

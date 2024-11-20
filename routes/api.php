@@ -25,6 +25,8 @@ Route::post('/events', [EventController::class, 'create']);
 //events routs endpoind
 Route::post('/events/{event}/fields', [FormFieldController::class, 'create']);
 Route::get('/events/{event}/fields', [FormFieldController::class, 'show']);
+Route::get('/events/{organizationId}', [EventController::class, 'getEventsByOrganization']);
+
 
 
 // Rute yang dilindungi untuk pendaftaran organisasi

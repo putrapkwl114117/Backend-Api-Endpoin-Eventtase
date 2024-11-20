@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('organization_id')->constrained()->onDelete('cascade');
             $table->string('name'); // Nama event
             $table->string('description');
+            $table->string('image_path')->nullable();
             $table->timestamps();
             });
     }

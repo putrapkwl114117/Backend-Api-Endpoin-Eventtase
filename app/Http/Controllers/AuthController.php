@@ -50,7 +50,7 @@ class AuthController extends Controller
             ], 200);
         }
 
-        // Jika kredensial tidak valid
+        // Jika kredensial tidak valida
         return response()->json(['message' => 'Invalid login credentials'], 401);
     }
 
